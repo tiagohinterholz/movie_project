@@ -1,12 +1,11 @@
 import uuid
 from django.db import models
-from django.conf import settings
 
 
 class Favorite(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="favorites"
+    favorite_list = models.ForeignKey(
+        "FavoriteList", on_delete=models.CASCADE, related_name="favorites"
     )
     tmdb_id = models.PositiveIntegerField()
     title = models.CharField(max_length=255)
@@ -23,7 +22,7 @@ class Favorite(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ("user", "tmdb_id")
+        unique_together = ("favorite_list", "tmdb_id")
         ordering = ["-created_at"]
 
     def __str__(self):

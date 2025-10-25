@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import status
 from apps.favorites.serializers.favorite_serializer import FavoriteSerializer
 from apps.favorites.services.favorite_service import favorite_service
@@ -26,3 +26,21 @@ class FavoriteDeleteView(APIView):
     def delete(self, request, pk):
         result = favorite_service.remove_favorite(request.user, pk)
         return Response(result, status=status.HTTP_204_NO_CONTENT)
+
+
+class  FavoriteShareGenerateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, share_uuid):
+        result = favorite_service.get_share_link(request.user, request)
+        return Response(result, status=200)
+
+class FavoriteShareView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, share_uuid):
+        favorites = favorite_service.get_share_uuid(share_uuid)
+        if not favorites.exists():
+            return Response({"detail": "Link inválido ou expirado."}, status=404)
+        serializer = FavoriteSerializer(favorites, many=True)
+        return Response(serializer.data, status=200)
