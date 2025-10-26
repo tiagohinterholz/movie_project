@@ -29,14 +29,14 @@ class FavoriteListDetailView(APIView):
         serializer = FavoriteListSerializer(favorite_list)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def patch(self, request, list_id):
+    def patch(self, request, favorite_list_id):
         name = request.data.get("name")
-        updated_list = favorite_list_service.update(request.user, list_id, name)
+        updated_list = favorite_list_service.update(request.user, favorite_list_id, name)
         serializer = FavoriteListSerializer(updated_list)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def delete(self, request, list_id):
-        favorite_list_service.delete(request.user, list_id)
+    def delete(self, request, favorite_list_id):
+        favorite_list_service.delete(request.user, favorite_list_id)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

@@ -11,12 +11,12 @@ class FavoriteListRepository:
         return FavoriteList.objects.filter(user=user)
 
     @staticmethod
-    def get_by_user_and_id(user, list_id):
-        return FavoriteList.objects.filter(id=list_id, user=user).first()
+    def get_by_user_and_id(user, favorite_list_id):
+        return FavoriteList.objects.filter(id=favorite_list_id, user=user).first()
     
     @staticmethod
-    def update(user, list_id, name):
-        favorite_list = FavoriteList.objects.filter(id=list_id, user=user).first()
+    def update(user, favorite_list_id, name):
+        favorite_list = FavoriteList.objects.filter(id=favorite_list_id, user=user).first()
         if favorite_list:
             favorite_list.name = name
             favorite_list.save()
@@ -27,7 +27,7 @@ class FavoriteListRepository:
         return FavoriteList.objects.filter(share_uuid=share_uuid).first()
 
     @staticmethod
-    def delete_by_user_and_id(user, list_id):
-        FavoriteList.objects.filter(id=list_id, user=user).delete()
+    def delete_by_user_and_id(user, favorite_list_id):
+        FavoriteList.objects.filter(id=favorite_list_id, user=user).delete()
 
 favorite_list_repository = FavoriteListRepository()

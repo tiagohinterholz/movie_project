@@ -12,8 +12,8 @@ from apps.favorites.repositories.favorite_list_repository import favorite_list_r
 class FavoriteShareGenerateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, list_id):
-        favorite_list = favorite_list_service.list_by_user(request.user, list_id)
+    def post(self, request, favorite_list_id):
+        favorite_list = favorite_list_service.list_by_user(request.user, favorite_list_id)
         share_link = request.build_absolute_uri(
             reverse("favorite-share", kwargs={"share_uuid": favorite_list.share_uuid})
         )

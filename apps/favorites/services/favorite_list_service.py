@@ -14,32 +14,32 @@ class FavoriteListService:
         return favorite_list_repository.get_all_by_user(user)
 
     @staticmethod
-    def list_by_user(user, list_id):
-        favorite_list = favorite_list_repository.get_by_user_and_id(user, list_id)
+    def list_by_user(user, favorite_list_id):
+        favorite_list = favorite_list_repository.get_by_user_and_id(user, favorite_list_id)
         if not favorite_list:
             raise ValidationError("Lista não encontrada.")
         return favorite_list
 
     @staticmethod
-    def update(user, list_id, name: str):
+    def update(user, favorite_list_id, name: str):
         if not name:
             raise ValidationError("O campo 'name' é obrigatório.")
 
-        favorite_list = favorite_list_repository.get_by_user_and_id(user, list_id)
+        favorite_list = favorite_list_repository.get_by_user_and_id(user, favorite_list_id)
         if not favorite_list:
             raise ValidationError("Lista não encontrada.")
 
-        updated_list = favorite_list_repository.update_name(user, list_id, name)
+        updated_list = favorite_list_repository.update(user, favorite_list_id, name)
         if not updated_list:
             raise ValidationError("Erro ao atualizar a lista.")
         return updated_list
 
     @staticmethod
-    def delete(user, list_id):
-        favorite_list = favorite_list_repository.get_by_user_and_id(user, list_id)
+    def delete(user, favorite_list_id):
+        favorite_list = favorite_list_repository.get_by_user_and_id(user, favorite_list_id)
         if not favorite_list:
             raise ValidationError("Lista não encontrada.")
-        favorite_list_repository.delete_by_user_and_id(user, list_id)
+        favorite_list_repository.delete_by_user_and_id(user, favorite_list_id)
 
 
 favorite_list_service = FavoriteListService()
