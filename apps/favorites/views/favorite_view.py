@@ -1,21 +1,24 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from apps.favorites.serializers.favorite_serializer import FavoriteSerializer
+from apps.favorites.services.favorite_list_service import favorite_list_service
 from apps.favorites.services.favorite_service import favorite_service
 
 
-class FavoriteListCreateView(APIView):
+class FavoriteCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        favorites = favorite_service.list_favorites(request.user)
+    def get(self, request, favorite_list_id):
+        favorites = favorite_service.list_favorites(request.user, favorite_list_id)
         serializer = FavoriteSerializer(favorites, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def post(self, request):
-        favorite = favorite_service.add_favorite(request.user, request.data)
+    def post(self, request, favorite_list_id):
+        favorite_list = favorite_list_service.list_by_user(request.user, favorite_list_id)
+        
+        favorite = favorite_service.add_favorite(request.user, favorite_list.id, request.data)
         serializer = FavoriteSerializer(favorite)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -23,24 +26,6 @@ class FavoriteListCreateView(APIView):
 class FavoriteDeleteView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def delete(self, request, pk):
-        result = favorite_service.remove_favorite(request.user, pk)
+    def delete(self, request, favorite_list_id, favorite_id):
+        result = favorite_service.remove_favorite(request.user, favorite_list_id, favorite_id)
         return Response(result, status=status.HTTP_204_NO_CONTENT)
-
-
-class  FavoriteShareGenerateView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, share_uuid):
-        result = favorite_service.get_share_link(request.user, request)
-        return Response(result, status=200)
-
-class FavoriteShareView(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request, share_uuid):
-        favorites = favorite_service.get_share_uuid(share_uuid)
-        if not favorites.exists():
-            return Response({"detail": "Link inválido ou expirado."}, status=404)
-        serializer = FavoriteSerializer(favorites, many=True)
-        return Response(serializer.data, status=200)

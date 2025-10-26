@@ -1,6 +1,6 @@
 from django.urls import reverse
 from rest_framework.exceptions import ValidationError
-from apps.favorites.repositories import favorite_list_repository
+from apps.favorites.repositories.favorite_list_repository import favorite_list_repository
 from apps.favorites.repositories.favorite_repository import favorite_repository
 
 
@@ -15,7 +15,8 @@ class FavoriteService:
         if existing:
             raise ValidationError("Este filme já está nos seus favoritos nesta lista.")
 
-        return favorite_repository.create(favorite_list, data)
+        data['favorite_list'] = favorite_list
+        return favorite_repository.create(data)
 
     @staticmethod
     def list_favorites(user, favorite_list_id):
@@ -23,7 +24,7 @@ class FavoriteService:
         if not favorite_list:
             raise ValidationError("Lista de favoritos não encontrada.")
 
-        return favorite_repository.get_all_by_list(favorite_list)
+        return favorite_repository.get_all_by_list(favorite_list_id)
 
     @staticmethod
     def remove_favorite(user, favorite_list_id, favorite_id):
@@ -35,7 +36,7 @@ class FavoriteService:
         if not existing:
             raise ValidationError("Filme não encontrado nesta lista.")
 
-        favorite_repository.delete(favorite_list, favorite_id)
+        favorite_repository.delete(existing)
         return None
 
     @staticmethod
