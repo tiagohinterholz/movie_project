@@ -18,6 +18,15 @@ ALLOWED_HOSTS = [
     h.strip() for h in os.getenv("ALLOWED_HOSTS", "").split(",") if h.strip()
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    "content-type",
+    "authorization",
+]
+
 # ===================== APLICATIVOS =====================
 DJANGO_APPS = [
     "django.contrib.admin",
@@ -44,6 +53,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_APPS + PROJECT_APPS
 
 # ===================== MIDDLEWARE =====================
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
