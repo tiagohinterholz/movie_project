@@ -124,8 +124,8 @@ SIMPLE_JWT = {
 
 # ===================== DOCUMENTAÇÃO =====================
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Lacrei Saúde API",
-    "DESCRIPTION": "API desenvolvida para o desafio técnico da Lacrei Saúde.",
+    "TITLE": "Movies TMDb",
+    "DESCRIPTION": "API desenvolvida para o desafio técnico da Verzel.",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "SERVE_AUTHENTICATION": [],
