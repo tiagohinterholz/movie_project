@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import status
-from apps.favorites.serializers.favorite_list_serializer import FavoriteListSerializer
+from apps.favorites.serializers.favorite_list_serializer import FavoriteListSerializer , FavoriteListDetailSerializer
 from apps.favorites.services.favorite_list_service import favorite_list_service
 
 
@@ -26,7 +26,7 @@ class FavoriteListDetailView(APIView):
 
     def get(self, request, favorite_list_id):
         favorite_list = favorite_list_service.list_by_user(request.user, favorite_list_id)
-        serializer = FavoriteListSerializer(favorite_list)
+        serializer = FavoriteListDetailSerializer(favorite_list)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def patch(self, request, favorite_list_id):
