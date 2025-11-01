@@ -24,8 +24,8 @@ class FavoriteListView(APIView):
 class FavoriteListDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, list_id):
-        favorite_list = favorite_list_service.list_by_user(request.user, list_id)
+    def get(self, request, favorite_list_id):
+        favorite_list = favorite_list_service.list_by_user(request.user, favorite_list_id)
         serializer = FavoriteListSerializer(favorite_list)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
